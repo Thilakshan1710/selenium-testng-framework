@@ -24,8 +24,4 @@ public class WaitUtils {
     public void waitForClickable(By locator) {
         wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
-
-    public void waitForTitle(String title) {
-        wait.until(ExpectedConditions.titleContains(title));
-    }
 }

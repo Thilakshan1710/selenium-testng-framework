@@ -2,7 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
 import utils.WaitUtils;
 
 public class LoginPage {
@@ -35,7 +34,6 @@ public class LoginPage {
     }
 
     public String getErrorMessage() {
-
         wait.waitForVisible(errorMsg);
         return driver.findElement(errorMsg).getText();
     }

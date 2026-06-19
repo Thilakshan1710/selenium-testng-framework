@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/Thilakshan1710/selenium-testng-framework.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'mvn clean compile'
+            }
+        }
+
+        stage('Execute Tests') {
+            steps {
+                bat 'mvn test'
+            }
+        }
+
+        stage('Publish Results') {
+            steps {
+                junit '**/testng-results.xml'
+            }
+        }
+    }
+
+    post {
+
+        always {
+            archiveArtifacts artifacts: 'screenshots/*.png', allowEmptyArchive: true
+        }
+
+        success {
+            echo 'Automation Execution Successful'
+        }
+
+        failure {
+            echo 'Automation Execution Failed'
+        }
+    }
+}

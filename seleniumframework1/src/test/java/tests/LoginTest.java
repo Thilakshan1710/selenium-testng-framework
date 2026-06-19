@@ -14,7 +14,8 @@ import org.testng.annotations.Listeners;
 import listeners.TestListener;
 
 import org.testng.annotations.DataProvider;
-
+import utils.ConfigReader;
+import utils.WaitUtils;
 
 
 @Listeners(TestListener.class)
@@ -33,11 +34,9 @@ public class LoginTest extends BaseTest {
 	@Test(dataProvider = "loginData")
 	public void loginTest(String username, String password) {
 
-	    driver.get("https://www.saucedemo.com/");
+    	driver.get(ConfigReader.getProperty("url"));
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name")));
+    	new WaitUtils(driver).waitForVisible(By.id("user-name"));
 
 	    LoginPage loginPage = new LoginPage(driver);
 
@@ -49,11 +48,9 @@ public class LoginTest extends BaseTest {
     @Test
     public void verifyLogin() {
 
-        driver.get("https://www.saucedemo.com/");
+    	driver.get(ConfigReader.getProperty("url"));
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name")));
+    	new WaitUtils(driver).waitForVisible(By.id("user-name"));
         
         LoginPage loginPage = new LoginPage(driver);
 
@@ -65,7 +62,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void verifyInvalidLogin() {
 
-        driver.get("https://www.saucedemo.com/");
+    	driver.get(ConfigReader.getProperty("url"));
 
         LoginPage loginPage = new LoginPage(driver);
 
@@ -82,7 +79,7 @@ public class LoginTest extends BaseTest {
     @Test(enabled = false)
     public void verifyLoginFailureDemo() {
 
-        driver.get("https://www.saucedemo.com/");
+    	driver.get(ConfigReader.getProperty("url"));
 
         String error = driver.findElement(By.cssSelector("h3[data-test='error']")).getText();
 

@@ -4,36 +4,43 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-
-import utils.ExtentManager;
+import base.DriverFactory;
+import utils.ScreenshotUtil;
 
 public class TestListener implements ITestListener {
 
-    private static ExtentReports extent =
-            ExtentManager.getInstance();
-
-    private static ThreadLocal<ExtentTest> test =
-            new ThreadLocal<>();
-
     @Override
-    public void onTestStart(ITestResult result) {
-        test.set(extent.createTest(result.getName()));
+    public void onTestFailure(ITestResult result) {
+
+        String testName = result.getName();
+
+        if (DriverFactory.getDriver() != null) {
+            ScreenshotUtil.takeScreenshot(
+                    DriverFactory.getDriver(),
+                    testName
+            );
+        }
+
+        System.out.println("❌ FAILED: " + testName);
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        test.get().pass("Test Passed");
+        System.out.println("✅ PASS: " + result.getName());
     }
 
     @Override
-    public void onTestFailure(ITestResult result) {
-        test.get().fail(result.getThrowable());
+    public void onTestSkipped(ITestResult result) {
+        System.out.println("⚠️ SKIP: " + result.getName());
+    }
+
+    @Override
+    public void onStart(ITestContext context) {
+        System.out.println("🚀 TEST SUITE STARTED: " + context.getName());
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        extent.flush();
+        System.out.println("🏁 TEST SUITE FINISHED: " + context.getName());
     }
 }
